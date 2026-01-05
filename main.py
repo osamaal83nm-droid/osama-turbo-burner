@@ -1,23 +1,21 @@
-import multiprocessing
-import time
+import os
+from pyairtable import Api
 
-# بياناتك لربط الأرباح في Odysee
-USER_EMAIL = "osamaal83nm@gmail.com" 
+# إحداثيات المخزن الجديد
+AIRTABLE_API_KEY = os.environ.get('AIRTABLE_API_KEY')
+BASE_ID = "appUh9VyWQVqYjyBs" # مأخوذ من رابطك
+TABLE_NAME = "Freelancer Projects" # اسم جدول Omni
 
-def start_burning(session_id):
-    print(f"🚀 انطلاق المسار رقم {session_id} لحرق الرصيد...")
-    while True:
-        # كود محاكاة المشاهدة المكثفة لجمع الـ Credits
-        time.sleep(10) 
-        print(f"💰 المسار {session_id}: تم جمع عملات جديدة لحساب {USER_EMAIL}")
-
-if __name__ == "__main__":
-    # إطلاق 10 وحوش مشاهدة في وقت واحد لاستهلاك الـ 5 دولار بسرعة
-    processes = []
-    for i in range(1, 11):
-        p = multiprocessing.Process(target=start_burning, args=(i,))
-        p.start()
-        processes.append(p)
+def send_to_airtable(project_data):
+    api = Api(AIRTABLE_API_KEY)
+    table = api.table(BASE_ID, TABLE_NAME)
     
-    for p in processes:
-        p.join()
+    # إرسال البيانات للأعمدة الخمسة التي بناها Omni
+    table.create({
+        "Project Name": project_data['name'],
+        "Budget": project_data['budget'],
+        "Link": project_data['link'],
+        "Skills": project_data['skills'],
+        "AI Proposal": project_data['proposal']
+    })
+    print(f"✅ تم حقن المشروع في Airtable غصبن عنهم!")
