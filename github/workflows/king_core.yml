@@ -1,0 +1,23 @@
+name: Osama Turbo Burner Core
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 * * * *' # يعمل تلقائياً كل ساعة
+
+jobs:
+  run_core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Run Osama Core
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+        run: python main.py
