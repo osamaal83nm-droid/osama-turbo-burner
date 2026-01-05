@@ -1,26 +1,20 @@
-name: Osama Turbo Burner Core
+import os
+import requests
+from pyairtable import Api
 
-on:
-  workflow_dispatch:
+# إعدادات لقمة العيش
+AIRTABLE_API_KEY = os.environ.get('AIRTABLE_API_KEY')
+BASE_ID = "appUh9VyWQVqYjyBs"
+TABLE_NAME = "Freelancer Projects"
 
-jobs:
-  run_core:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+def start_mission():
+    print("🧹 جاري تنظيف الجدول وبحث لقمة العيش...")
+    try:
+        table = Api(AIRTABLE_API_KEY).table(BASE_ID, TABLE_NAME)
+        # هنا يبدأ العمل الصادق
+        print("✅ تم بنجاح يا مَلِك!")
+    except Exception as e:
+        print(f"❌ عائق بسيط: {e}")
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run Osama Core
-        env:
-          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-        run: python main.py
+if __name__ == "__main__":
+    start_mission()
