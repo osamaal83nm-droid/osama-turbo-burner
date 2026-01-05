@@ -1,20 +1,22 @@
 name: Osama Turbo Burner Core
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch: # هذا السطر هو اللي بيطلع لك زر التشغيل اليدوي غصب!
-
+  workflow_dispatch:
 jobs:
   run_core:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Python
+      - name: 📥 سحب الكود
+        uses: actions/checkout@v2
+      - name: 🐍 تجهيز بيئة بايثون
         uses: actions/setup-python@v2
         with:
           python-version: '3.9'
-      - name: Run Osama Core
+      - name: 📦 تثبيت مكتبات لقمة العيش
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyairtable
+      - name: 🚀 إطلاق المهمة
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
         run: python main.py
+        
